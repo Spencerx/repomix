@@ -171,7 +171,7 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - run: npm ci
-      - run: ./node_modules/.bin/rimraf lib && ./node_modules/.bin/tsc -p tsconfig.build.json --sourceMap --declaration
+      - run: node --run build -- --sourceMap --declaration
       - name: Remove dev dependencies
         run: npm prune --omit=dev
       - run: node bin/repomix.cjs
