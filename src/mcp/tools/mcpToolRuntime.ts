@@ -1,10 +1,10 @@
 import crypto from 'node:crypto';
 import fs from 'node:fs/promises';
-import os from 'node:os';
 import path from 'node:path';
 import type { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
 import { generateTreeString } from '../../core/file/fileTreeGenerate.js';
 import type { ProcessedFile } from '../../core/file/fileTypes.js';
+import { getRepomixTmpDir } from '../../shared/tmpDir.js';
 
 // Map to store generated output files
 const outputFileRegistry = new Map<string, string>();
@@ -48,7 +48,7 @@ type McpToolStructuredContent = (BaseMcpToolResponse & Record<string, unknown>) 
  */
 export const createToolWorkspace = async (): Promise<string> => {
   try {
-    const tmpBaseDir = path.join(os.tmpdir(), 'repomix', 'mcp-outputs');
+    const tmpBaseDir = path.join(getRepomixTmpDir(), 'mcp-outputs');
     await fs.mkdir(tmpBaseDir, { recursive: true });
     const tempDir = await fs.mkdtemp(`${tmpBaseDir}/`);
     return tempDir;

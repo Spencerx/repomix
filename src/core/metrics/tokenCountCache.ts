@@ -1,8 +1,8 @@
 import { createHash } from 'node:crypto';
 import fs from 'node:fs/promises';
-import os from 'node:os';
 import path from 'node:path';
 import { logger } from '../../shared/logger.js';
+import { getRepomixTmpDir } from '../../shared/tmpDir.js';
 import type { TokenEncoding } from './tokenEncodings.js';
 
 // Cache schema version. Bump when the on-disk format changes incompatibly so
@@ -14,10 +14,8 @@ const CACHE_VERSION = 1;
 // cap is exceeded the oldest entries are dropped at save time.
 export const MAX_CACHE_ENTRIES = 100_000;
 
-// Cache lives under $TMPDIR/repomix/cache/ to share the `repomix/` parent
-// directory with other ephemeral state (e.g. mcp-outputs/), so all repomix
-// temp artifacts on a host are siblings under one umbrella.
-const CACHE_DIR_NAME = 'repomix';
+// Cache lives under $TMPDIR/repomix/cache/, sharing the `repomix/` umbrella
+// (see shared/tmpDir.ts) with other ephemeral state such as mcp-outputs/.
 const CACHE_SUBDIR_NAME = 'cache';
 const CACHE_FILE_NAME = 'token-counts.json';
 
@@ -49,7 +47,7 @@ let state = createState();
 export const getCacheFilePath = (): string => {
   const override = process.env.REPOMIX_TOKEN_CACHE_PATH;
   if (override) return override;
-  return path.join(os.tmpdir(), CACHE_DIR_NAME, CACHE_SUBDIR_NAME, CACHE_FILE_NAME);
+  return path.join(getRepomixTmpDir(), CACHE_SUBDIR_NAME, CACHE_FILE_NAME);
 };
 
 /**

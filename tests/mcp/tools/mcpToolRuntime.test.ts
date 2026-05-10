@@ -63,7 +63,10 @@ describe('mcpToolRuntime', () => {
       const tempDir = await createToolWorkspace();
 
       expect(os.tmpdir).toHaveBeenCalled();
-      expect(path.join).toHaveBeenCalledWith('/tmp', 'repomix', 'mcp-outputs');
+      // path.join is now invoked twice: once inside shared/tmpDir.getRepomixTmpDir
+      // to build the umbrella, then again here to append the mcp-outputs subdir.
+      expect(path.join).toHaveBeenCalledWith('/tmp', 'repomix');
+      expect(path.join).toHaveBeenCalledWith('/tmp/repomix', 'mcp-outputs');
       expect(fs.mkdir).toHaveBeenCalledWith('/tmp/repomix/mcp-outputs', { recursive: true });
       expect(fs.mkdtemp).toHaveBeenCalledWith('/tmp/repomix/mcp-outputs/');
       expect(tempDir).toBe('/tmp/repomix/mcp-outputs/temp-dir');
