@@ -158,6 +158,14 @@ export const saveTokenCountCache = async (): Promise<void> => {
 
     if (state.revision === startRevision) {
       state.dirty = false;
+    } else {
+      // Our snapshot was already stale by the time the rename landed
+      // (a concurrent `setCached` ran during the in-flight write). Two
+      // overlapping saves can also let the stale snapshot rename *after*
+      // the newer one, so the disk now holds out-of-date data. Force
+      // `dirty = true` so the next save re-persists the actual current
+      // state and corrects the disk.
+      state.dirty = true;
     }
     logger.trace(`Saved ${state.entries.size} token count cache entries to ${cacheFile}`);
   } catch (error) {
