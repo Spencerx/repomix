@@ -110,7 +110,7 @@ describe('security scan spec', () => {
     tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), 'repomix-security-spec-'));
     outputPath = path.join(tmpDir, 'output.xml');
     // Fixture: one clean file + one file carrying a known secretlint trigger.
-    await fs.writeFile(path.join(tmpDir, 'clean.ts'), 'export const greet = (n: string) => `hi ${n}`;\n');
+    await fs.writeFile(path.join(tmpDir, 'clean.ts'), 'export const greet = (n: string) => "hi " + n;\n');
     await fs.writeFile(path.join(tmpDir, 'leaky.env'), `${FAKE_AWS_SECRET}\n`);
   });
 
