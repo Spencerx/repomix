@@ -3,7 +3,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { searchFiles } from '../../../src/core/file/fileSearch.js';
-import { createMockConfig } from '../../testing/testUtils.js';
+import { createMockConfig, writeFixture } from '../../testing/testUtils.js';
 
 // Behavior-level regression tests for empty-directory preservation.
 //
@@ -17,14 +17,6 @@ import { createMockConfig } from '../../testing/testUtils.js';
 // generateMultiRootSections in fileTreeGenerate.ts: "Empty directories
 // (emptyDirPaths) are not included in multi-root output"). Asserting on it
 // would freeze the current intentional gap as a contract.
-
-const writeFixture = async (rootDir: string, files: Record<string, string>): Promise<void> => {
-  for (const [relPath, content] of Object.entries(files)) {
-    const fullPath = path.join(rootDir, relPath);
-    await fs.mkdir(path.dirname(fullPath), { recursive: true });
-    await fs.writeFile(fullPath, content);
-  }
-};
 
 describe('empty directory preservation spec', () => {
   let tmpDir: string;

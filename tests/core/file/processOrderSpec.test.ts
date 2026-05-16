@@ -82,7 +82,7 @@ describe('file process transform order spec', () => {
     // MIN_CHAR_TYPE_COUNT=3) — a monotonous 'A'.repeat() does not qualify, so
     // we synthesize a varied 512-char run.
     const charset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    const longBase64 = Array.from({ length: 512 }, (_, i) => charset[i % charset.length]).join('');
+    const longBase64 = charset.repeat(Math.ceil(512 / charset.length)).slice(0, 512);
     const rawFiles: RawFile[] = [
       {
         path: 'sample.ts',

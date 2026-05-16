@@ -106,7 +106,7 @@ describe('binary detection spec', () => {
 
     expect(rawFiles).toHaveLength(1);
     expect(rawFiles[0].content).toContain('BOM-MARKER');
-    expect(rawFiles[0].content.charCodeAt(0)).not.toBe(0xfeff);
+    expect(rawFiles[0].content.startsWith('\ufeff')).toBe(false);
     expect(skippedFiles).toHaveLength(0);
   });
 });

@@ -3,7 +3,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { searchFiles } from '../../../src/core/file/fileSearch.js';
-import { createMockConfig } from '../../testing/testUtils.js';
+import { createMockConfig, writeFixture } from '../../testing/testUtils.js';
 
 // Behavior-level regression tests for repomix-specific ignore files.
 //
@@ -17,14 +17,6 @@ import { createMockConfig } from '../../testing/testUtils.js';
 // Fixtures use file extensions outside the project's defaultIgnoreList so any
 // filtering observed must originate from the user-provided ignore file under
 // test rather than from baseline defaults.
-
-const writeFixture = async (rootDir: string, files: Record<string, string>): Promise<void> => {
-  for (const [relPath, content] of Object.entries(files)) {
-    const fullPath = path.join(rootDir, relPath);
-    await fs.mkdir(path.dirname(fullPath), { recursive: true });
-    await fs.writeFile(fullPath, content);
-  }
-};
 
 describe('repomix dot-ignore spec', () => {
   let tmpDir: string;
